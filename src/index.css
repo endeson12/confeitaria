@@ -1,3 +1,133 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* CSS Responsivo e Acessível - Mobile-First */
+
+/* Reset e configurações base para acessibilidade */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  /* Scroll suave para navegação por âncoras */
+  scroll-behavior: smooth;
+  /* Tamanho base da fonte responsivo */
+  font-size: clamp(14px, 2.5vw, 16px);
+}
+
+body {
+  /* Evita scroll horizontal */
+  overflow-x: hidden;
+  /* Melhora a legibilidade do texto */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* Altura mínima para evitar problemas em dispositivos pequenos */
+  min-height: 100vh;
+}
+
+/* Melhorias de acessibilidade para foco */
+*:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Remove outline apenas quando não há navegação por teclado */
+.js-focus-visible *:focus:not(.focus-visible) {
+  outline: none;
+}
+
+/* Melhora contraste para links */
+a {
+  color: #1d4ed8;
+  text-decoration: underline;
+}
+
+a:hover {
+  color: #1e40af;
+}
+
+/* Botões com melhor contraste */
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Imagens responsivas por padrão */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Melhora a legibilidade de textos pequenos */
+small, .text-sm {
+  font-size: clamp(0.75rem, 2vw, 0.875rem);
+}
+
+/* Media queries para tipografia responsiva */
+@media (min-width: 640px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+@media (min-width: 1024px) {
+  html {
+    font-size: 18px;
+  }
+}
+
+/* Melhorias para dispositivos com tela sensível ao toque */
+@media (hover: none) and (pointer: coarse) {
+  /* Aumenta área de toque em dispositivos móveis */
+  button, a, [role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 0.75rem;
+  }
+  
+  /* Remove efeitos hover em dispositivos touch */
+  *:hover {
+    background-color: initial;
+    color: initial;
+  }
+}
+
+/* Animações respeitam preferências de movimento reduzido */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Alto contraste para usuários que precisam */
+@media (prefers-contrast: high) {
+  * {
+    border-color: #000 !important;
+    color: #000 !important;
+  }
+  
+  button, .bg-gradient-to-r {
+    background: #000 !important;
+    color: #fff !important;
+  }
+}
+
+/* Modo escuro básico */
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #1f2937;
+    color: #f9fafb;
+  }
+}

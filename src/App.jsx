@@ -1,33 +1,39 @@
 import React, { useState } from 'react'
 
-// Ícones SVG
-const ShoppingCartIcon = ({ className = "w-6 h-6" }) => (
-  <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+// Ícones SVG com melhor acessibilidade
+const ShoppingCartIcon = ({ className = "w-6 h-6", ariaLabel }) => (
+  <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-label={ariaLabel} role="img">
     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.5 6M7 13l-1.5 6m0 0h9M17 21a2 2 0 100-4 2 2 0 000 4zM9 21a2 2 0 100-4 2 2 0 000 4z" />
   </svg>
 )
 
-const HeartIcon = ({ className = "w-6 h-6", filled = false }) => (
-  <svg className={className} fill={filled ? "currentColor" : "none"} stroke="currentColor" viewBox="0 0 24 24">
+const HeartIcon = ({ className = "w-6 h-6", filled = false, ariaLabel }) => (
+  <svg className={className} fill={filled ? "currentColor" : "none"} stroke="currentColor" viewBox="0 0 24 24" aria-label={ariaLabel} role="img">
     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
   </svg>
 )
 
-const PlusIcon = ({ className = "w-5 h-5" }) => (
-  <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+const PlusIcon = ({ className = "w-5 h-5", ariaLabel }) => (
+  <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-label={ariaLabel} role="img">
     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
   </svg>
 )
 
-const MinusIcon = ({ className = "w-5 h-5" }) => (
-  <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+const MinusIcon = ({ className = "w-5 h-5", ariaLabel }) => (
+  <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-label={ariaLabel} role="img">
     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
   </svg>
 )
 
-const SearchIcon = ({ className = "w-5 h-5" }) => (
-  <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+const MenuIcon = ({ className = "w-6 h-6" }) => (
+  <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+  </svg>
+)
+
+const CloseIcon = ({ className = "w-6 h-6" }) => (
+  <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
   </svg>
 )
 
@@ -90,6 +96,7 @@ function App() {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('Todos')
   const [showNotification, setShowNotification] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   // Funções do carrinho
   const addToCart = (product) => {
@@ -150,267 +157,382 @@ function App() {
   })
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-50 via-secondary-50 to-accent-50" style={{ fontFamily: 'Nunito, sans-serif' }}>
-      {/* Notificação */}
+    <div className="min-h-screen bg-gradient-to-br from-primary-50 via-secondary-50 to-accent-50 overflow-x-hidden" style={{ fontFamily: 'Nunito, sans-serif' }}>
+      {/* Notificação com melhor acessibilidade */}
       {showNotification && (
-        <div className="fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50">
-          Item adicionado ao carrinho! ✅
+        <div className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-4 py-3 sm:px-6 rounded-lg shadow-lg z-50 text-center max-w-xs sm:max-w-sm" role="alert" aria-live="polite">
+          <span className="text-sm sm:text-base font-medium">Item adicionado ao carrinho! ✅</span>
         </div>
       )}
 
-      {/* Navegação */}
-      <nav className="bg-white/95 backdrop-blur-md shadow-2xl sticky top-0 z-50 border-b border-primary-200">
+      {/* Navegação Responsiva */}
+      <nav className="bg-white/95 backdrop-blur-md shadow-2xl sticky top-0 z-50 border-b border-primary-200" role="navigation" aria-label="Navegação principal">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-20">
-            <div 
-              className="flex items-center cursor-pointer group"
-              onClick={() => setCurrentPage('home')}
+          <div className="flex justify-between items-center h-16 sm:h-20">
+            {/* Logo */}
+            <button 
+              className="flex items-center cursor-pointer group focus:outline-none focus:ring-2 focus:ring-primary-500 rounded-lg p-2"
+              onClick={() => {
+                setCurrentPage('home')
+                setMobileMenuOpen(false)
+              }}
+              aria-label="Ir para página inicial"
             >
-              <h1 className="text-3xl font-black text-transparent bg-gradient-to-r from-primary-600 to-secondary-500 bg-clip-text">
+              <h1 className="text-xl sm:text-2xl lg:text-3xl font-black text-transparent bg-gradient-to-r from-primary-600 to-secondary-500 bg-clip-text">
                 Delícias da Casa 🍰
               </h1>
-            </div>
+            </button>
             
-            <div className="flex items-center space-x-4">
+            {/* Menu Desktop */}
+            <div className="hidden md:flex items-center space-x-2 lg:space-x-4">
               <button
                 onClick={() => setCurrentPage('home')}
-                className={`px-4 py-2 rounded-xl font-bold transition-all duration-300 ${
+                className={`px-3 py-2 lg:px-4 lg:py-2 rounded-xl font-bold transition-all duration-300 min-h-[44px] focus:outline-none focus:ring-2 focus:ring-primary-500 ${
                   currentPage === 'home' 
                     ? 'bg-gradient-to-r from-primary-500 to-secondary-500 text-white shadow-lg' 
                     : 'text-neutral-700 hover:bg-primary-100 hover:text-primary-600'
                 }`}
+                aria-label="Ir para página inicial"
               >
                 Início
               </button>
               <button
                 onClick={() => setCurrentPage('catalog')}
-                className={`px-4 py-2 rounded-xl font-bold transition-all duration-300 ${
+                className={`px-3 py-2 lg:px-4 lg:py-2 rounded-xl font-bold transition-all duration-300 min-h-[44px] focus:outline-none focus:ring-2 focus:ring-primary-500 ${
                   currentPage === 'catalog' 
                     ? 'bg-gradient-to-r from-primary-500 to-secondary-500 text-white shadow-lg' 
                     : 'text-neutral-700 hover:bg-primary-100 hover:text-primary-600'
                 }`}
+                aria-label="Ver catálogo de produtos"
               >
                 Catálogo
               </button>
               <button
                 onClick={() => setCurrentPage('about')}
-                className={`px-4 py-2 rounded-xl font-bold transition-all duration-300 ${
+                className={`px-3 py-2 lg:px-4 lg:py-2 rounded-xl font-bold transition-all duration-300 min-h-[44px] focus:outline-none focus:ring-2 focus:ring-primary-500 ${
                   currentPage === 'about' 
                     ? 'bg-gradient-to-r from-primary-500 to-secondary-500 text-white shadow-lg' 
                     : 'text-neutral-700 hover:bg-primary-100 hover:text-primary-600'
                 }`}
+                aria-label="Conhecer nossa história"
               >
                 Sobre Nós
               </button>
               <button
                 onClick={() => setCurrentPage('contact')}
-                className={`px-4 py-2 rounded-xl font-bold transition-all duration-300 ${
+                className={`px-3 py-2 lg:px-4 lg:py-2 rounded-xl font-bold transition-all duration-300 min-h-[44px] focus:outline-none focus:ring-2 focus:ring-primary-500 ${
                   currentPage === 'contact' 
                     ? 'bg-gradient-to-r from-primary-500 to-secondary-500 text-white shadow-lg' 
                     : 'text-neutral-700 hover:bg-primary-100 hover:text-primary-600'
                 }`}
+                aria-label="Entrar em contato"
               >
                 Contato
               </button>
               <button
                 onClick={() => setCurrentPage('cart')}
-                className="relative p-3 text-neutral-700 hover:bg-primary-100 hover:text-primary-600 rounded-xl transition-all duration-300"
+                className="relative p-3 text-neutral-700 hover:bg-primary-100 hover:text-primary-600 rounded-xl transition-all duration-300 min-h-[44px] min-w-[44px] focus:outline-none focus:ring-2 focus:ring-primary-500"
+                aria-label={`Carrinho de compras com ${getCartItemsCount()} itens`}
               >
-                <ShoppingCartIcon />
+                <ShoppingCartIcon ariaLabel="Carrinho de compras" />
                 {getCartItemsCount() > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-accent-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center font-bold animate-pulse">
+                  <span className="absolute -top-1 -right-1 bg-accent-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center font-bold animate-pulse" aria-hidden="true">
                     {getCartItemsCount()}
                   </span>
                 )}
               </button>
             </div>
+
+            {/* Menu Mobile - Hambúrguer */}
+            <div className="md:hidden flex items-center space-x-2">
+              <button
+                onClick={() => setCurrentPage('cart')}
+                className="relative p-3 text-neutral-700 hover:bg-primary-100 hover:text-primary-600 rounded-xl transition-all duration-300 min-h-[48px] min-w-[48px] focus:outline-none focus:ring-2 focus:ring-primary-500"
+                aria-label={`Carrinho de compras com ${getCartItemsCount()} itens`}
+              >
+                <ShoppingCartIcon className="w-6 h-6" ariaLabel="Carrinho de compras" />
+                {getCartItemsCount() > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-accent-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center font-bold animate-pulse" aria-hidden="true">
+                    {getCartItemsCount()}
+                  </span>
+                )}
+              </button>
+              <button
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="p-3 text-neutral-700 hover:bg-primary-100 hover:text-primary-600 rounded-xl transition-all duration-300 min-h-[48px] min-w-[48px] focus:outline-none focus:ring-2 focus:ring-primary-500"
+                aria-label={mobileMenuOpen ? "Fechar menu" : "Abrir menu"}
+                aria-expanded={mobileMenuOpen}
+              >
+                {mobileMenuOpen ? <CloseIcon /> : <MenuIcon />}
+              </button>
+            </div>
           </div>
+
+          {/* Menu Mobile Dropdown */}
+          {mobileMenuOpen && (
+            <div className="md:hidden bg-white border-t border-primary-200 py-4 space-y-2" role="menu">
+              <button
+                onClick={() => {
+                  setCurrentPage('home')
+                  setMobileMenuOpen(false)
+                }}
+                className={`w-full text-left px-4 py-4 font-bold transition-all duration-300 rounded-xl mx-2 min-h-[48px] focus:outline-none focus:ring-2 focus:ring-primary-500 ${
+                  currentPage === 'home' 
+                    ? 'bg-gradient-to-r from-primary-500 to-secondary-500 text-white shadow-lg' 
+                    : 'text-neutral-700 hover:bg-primary-100 hover:text-primary-600'
+                }`}
+                role="menuitem"
+                aria-label="Ir para página inicial"
+              >
+                🏠 Início
+              </button>
+              <button
+                onClick={() => {
+                  setCurrentPage('catalog')
+                  setMobileMenuOpen(false)
+                }}
+                className={`w-full text-left px-4 py-4 font-bold transition-all duration-300 rounded-xl mx-2 min-h-[48px] focus:outline-none focus:ring-2 focus:ring-primary-500 ${
+                  currentPage === 'catalog' 
+                    ? 'bg-gradient-to-r from-primary-500 to-secondary-500 text-white shadow-lg' 
+                    : 'text-neutral-700 hover:bg-primary-100 hover:text-primary-600'
+                }`}
+                role="menuitem"
+                aria-label="Ver catálogo de produtos"
+              >
+                🛍️ Catálogo
+              </button>
+              <button
+                onClick={() => {
+                  setCurrentPage('about')
+                  setMobileMenuOpen(false)
+                }}
+                className={`w-full text-left px-4 py-4 font-bold transition-all duration-300 rounded-xl mx-2 min-h-[48px] focus:outline-none focus:ring-2 focus:ring-primary-500 ${
+                  currentPage === 'about' 
+                    ? 'bg-gradient-to-r from-primary-500 to-secondary-500 text-white shadow-lg' 
+                    : 'text-neutral-700 hover:bg-primary-100 hover:text-primary-600'
+                }`}
+                role="menuitem"
+                aria-label="Conhecer nossa história"
+              >
+                💖 Sobre Nós
+              </button>
+              <button
+                onClick={() => {
+                  setCurrentPage('contact')
+                  setMobileMenuOpen(false)
+                }}
+                className={`w-full text-left px-4 py-4 font-bold transition-all duration-300 rounded-xl mx-2 min-h-[48px] focus:outline-none focus:ring-2 focus:ring-primary-500 ${
+                  currentPage === 'contact' 
+                    ? 'bg-gradient-to-r from-primary-500 to-secondary-500 text-white shadow-lg' 
+                    : 'text-neutral-700 hover:bg-primary-100 hover:text-primary-600'
+                }`}
+                role="menuitem"
+                aria-label="Entrar em contato"
+              >
+                📞 Contato
+              </button>
+            </div>
+          )}
         </div>
       </nav>
       
-      <main className="container mx-auto px-4 py-8">
+      <main className="container mx-auto px-4 py-4 sm:py-6 lg:py-8 max-w-full" role="main">
         {/* Página Inicial */}
         {currentPage === 'home' && (
           <div className="space-y-16">
-            {/* Hero Section */}
-            <div className="text-center space-y-8">
+            {/* Hero Section - Responsivo */}
+            <section className="text-center space-y-6 sm:space-y-8 px-2">
               <div className="space-y-4">
-                <h2 className="text-6xl md:text-7xl font-black text-transparent bg-gradient-to-r from-primary-600 via-secondary-500 to-accent-500 bg-clip-text leading-tight">
+                <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black text-transparent bg-gradient-to-r from-primary-600 via-secondary-500 to-accent-500 bg-clip-text leading-tight" style={{ fontSize: 'clamp(1.875rem, 5vw, 4.5rem)' }}>
                   O sabor que adoça seus momentos! ✨
                 </h2>
-                <p className="text-2xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+                <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-700 max-w-4xl mx-auto leading-relaxed px-4" style={{ fontSize: 'clamp(1rem, 2.5vw, 1.5rem)' }}>
                   Descubra nossas delícias artesanais feitas com muito carinho e ingredientes selecionados
                 </p>
               </div>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <div className="flex flex-col sm:flex-row gap-4 justify-center px-4">
                 <button
                   onClick={() => setCurrentPage('catalog')}
-                  className="bg-gradient-to-r from-primary-500 to-secondary-500 hover:from-primary-600 hover:to-secondary-600 text-white font-bold py-4 px-8 rounded-2xl text-xl shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300"
+                  className="bg-gradient-to-r from-primary-500 to-secondary-500 hover:from-primary-600 hover:to-secondary-600 text-white font-bold py-4 px-6 sm:px-8 rounded-2xl text-lg sm:text-xl shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300 min-h-[56px] focus:outline-none focus:ring-4 focus:ring-primary-300"
+                  aria-label="Ver catálogo de produtos"
                 >
                   Ver Catálogo 🛒
                 </button>
                 <button 
                   onClick={() => setCurrentPage('about')}
-                  className="bg-white/80 backdrop-blur-sm border-2 border-primary-300 text-primary-600 font-bold py-4 px-8 rounded-2xl text-xl hover:bg-primary-50 transition-all duration-300"
+                  className="bg-white/90 backdrop-blur-sm border-2 border-primary-300 text-primary-700 font-bold py-4 px-6 sm:px-8 rounded-2xl text-lg sm:text-xl hover:bg-primary-50 transition-all duration-300 min-h-[56px] focus:outline-none focus:ring-4 focus:ring-primary-300"
+                  aria-label="Conhecer nossa história"
                 >
                   Sobre Nós 💖
                 </button>
               </div>
-            </div>
+            </section>
 
-            {/* Produtos em Destaque */}
-            <div className="space-y-8">
-              <h3 className="text-4xl font-bold text-center text-gray-800">
+            {/* Produtos em Destaque - Responsivo */}
+            <section className="space-y-6 sm:space-y-8">
+              <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-center text-gray-800 px-4" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)' }}>
                 🌟 Produtos em Destaque
               </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 px-2">
                 {productsData.slice(0, 6).map(product => (
-                  <div key={product.id} className="group bg-white rounded-3xl shadow-xl overflow-hidden hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-500">
+                  <article key={product.id} className="group bg-white rounded-3xl shadow-xl overflow-hidden hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-500">
                     <div className="relative">
                       <img 
                         src={product.img} 
-                        alt={product.name}
-                        className="w-full h-56 object-cover group-hover:scale-110 transition-transform duration-500"
+                        alt={`${product.name} - ${product.description}`}
+                        className="w-full h-48 sm:h-56 object-cover group-hover:scale-110 transition-transform duration-500"
+                        loading="lazy"
                       />
                       <button
                         onClick={() => toggleFavorite(product.id)}
-                        className="absolute top-4 right-4 p-2 bg-white/90 backdrop-blur-sm rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
+                        className="absolute top-4 right-4 p-3 bg-white/90 backdrop-blur-sm rounded-full shadow-lg hover:shadow-xl transition-all duration-300 min-h-[44px] min-w-[44px] focus:outline-none focus:ring-2 focus:ring-red-400"
+                        aria-label={favorites.includes(product.id) ? `Remover ${product.name} dos favoritos` : `Adicionar ${product.name} aos favoritos`}
                       >
                         <HeartIcon 
-                          className={`w-6 h-6 ${
+                          className={`w-5 h-5 ${
                             favorites.includes(product.id) 
                               ? 'text-red-500' 
                               : 'text-gray-400 hover:text-red-400'
                           }`}
                           filled={favorites.includes(product.id)}
+                          ariaLabel={favorites.includes(product.id) ? 'Favorito' : 'Adicionar aos favoritos'}
                         />
                       </button>
-                      <div className="absolute bottom-4 left-4 bg-gradient-to-r from-primary-500 to-secondary-500 text-white px-3 py-1 rounded-full text-sm font-bold">
+                      <div className="absolute bottom-4 left-4 bg-gradient-to-r from-primary-500 to-secondary-500 text-white px-3 py-1 rounded-full text-sm font-bold" aria-label={`Categoria: ${product.category}`}>
                         {product.category}
                       </div>
                     </div>
-                    <div className="p-6 space-y-4">
+                    <div className="p-4 sm:p-6 space-y-4">
                       <div>
-                        <h4 className="font-bold text-xl text-gray-800 mb-2">{product.name}</h4>
-                        <p className="text-gray-600 text-sm leading-relaxed">{product.description}</p>
+                        <h4 className="font-bold text-lg sm:text-xl text-gray-800 mb-2">{product.name}</h4>
+                        <p className="text-gray-600 text-sm sm:text-base leading-relaxed">{product.description}</p>
                       </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-3xl font-black text-transparent bg-gradient-to-r from-primary-600 to-secondary-500 bg-clip-text">
+                      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                        <span className="text-2xl sm:text-3xl font-black text-transparent bg-gradient-to-r from-primary-600 to-secondary-500 bg-clip-text">
                           R$ {product.price.toFixed(2)}
                         </span>
                         <button
                           onClick={() => addToCart(product)}
-                          className="bg-gradient-to-r from-primary-500 to-secondary-500 hover:from-primary-600 hover:to-secondary-600 text-white px-6 py-3 rounded-xl font-bold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center space-x-2"
+                          className="w-full sm:w-auto bg-gradient-to-r from-primary-500 to-secondary-500 hover:from-primary-600 hover:to-secondary-600 text-white px-4 sm:px-6 py-3 rounded-xl font-bold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center space-x-2 min-h-[48px] focus:outline-none focus:ring-4 focus:ring-primary-300"
+                          aria-label={`Adicionar ${product.name} ao carrinho por R$ ${product.price.toFixed(2)}`}
                         >
-                          <PlusIcon className="w-4 h-4" />
+                          <PlusIcon className="w-4 h-4" ariaLabel="Adicionar" />
                           <span>Adicionar</span>
                         </button>
                       </div>
                     </div>
-                  </div>
+                  </article>
                 ))}
               </div>
-            </div>
+            </section>
           </div>
         )}
 
-        {/* Página do Catálogo */}
+        {/* Página do Catálogo - Responsiva */}
         {currentPage === 'catalog' && (
-          <div className="space-y-8">
-            <div className="text-center space-y-4">
-              <h2 className="text-5xl font-black text-transparent bg-gradient-to-r from-pink-600 to-orange-500 bg-clip-text">
+          <div className="space-y-6 sm:space-y-8">
+            <div className="text-center space-y-4 px-4">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-transparent bg-gradient-to-r from-pink-600 to-orange-500 bg-clip-text" style={{ fontSize: 'clamp(1.875rem, 5vw, 3rem)' }}>
                 Nosso Catálogo Completo
               </h2>
-              <p className="text-xl text-gray-600">
+              <p className="text-base sm:text-lg lg:text-xl text-gray-700" style={{ fontSize: 'clamp(1rem, 2.5vw, 1.25rem)' }}>
                 Explore todos os nossos produtos deliciosos
               </p>
             </div>
 
-            {/* Barra de Busca */}
-            <div className="max-w-2xl mx-auto">
+            {/* Barra de Busca - Responsiva */}
+            <div className="max-w-2xl mx-auto px-4">
               <div className="relative">
                 <input
                   type="text"
                   placeholder="Buscar produtos deliciosos..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full px-6 py-4 border-2 border-primary-200 rounded-2xl focus:ring-4 focus:ring-primary-200 focus:border-primary-400 outline-none text-lg bg-white/90 backdrop-blur-sm shadow-lg"
+                  className="w-full px-4 sm:px-6 py-3 sm:py-4 border-2 border-primary-200 rounded-2xl focus:ring-4 focus:ring-primary-200 focus:border-primary-400 outline-none text-base sm:text-lg bg-white/90 backdrop-blur-sm shadow-lg min-h-[48px]"
+                  aria-label="Buscar produtos no catálogo"
                 />
               </div>
             </div>
 
-            {/* Filtros por Categoria */}
-            <div className="flex flex-wrap justify-center gap-4">
+            {/* Filtros por Categoria - Responsivos */}
+            <div className="flex flex-wrap justify-center gap-2 sm:gap-4 px-4">
               {['Todos', 'Bolos', 'Tortas', 'Doces', 'Salgados'].map(category => (
                 <button
                   key={category}
                   onClick={() => setSelectedCategory(category)}
-                  className={`px-6 py-3 rounded-2xl font-bold transition-all duration-300 ${
+                  className={`px-4 sm:px-6 py-3 rounded-2xl font-bold transition-all duration-300 min-h-[48px] focus:outline-none focus:ring-4 focus:ring-pink-300 ${
                     selectedCategory === category
                       ? 'bg-gradient-to-r from-pink-500 to-orange-500 text-white shadow-lg transform scale-105'
-                      : 'bg-white/80 backdrop-blur-sm text-gray-700 hover:bg-pink-100 hover:text-pink-600 border-2 border-pink-200'
+                      : 'bg-white/90 backdrop-blur-sm text-gray-700 hover:bg-pink-100 hover:text-pink-600 border-2 border-pink-200'
                   }`}
+                  aria-label={`Filtrar por categoria: ${category}`}
+                  aria-pressed={selectedCategory === category}
                 >
                   {category}
                 </button>
               ))}
             </div>
 
-            {/* Grid de Produtos */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+            {/* Grid de Produtos - Responsivo */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 px-2">
               {filteredProducts.map(product => (
-                <div key={product.id} className="group bg-white rounded-3xl shadow-xl overflow-hidden hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-500">
+                <article key={product.id} className="group bg-white rounded-3xl shadow-xl overflow-hidden hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-500">
                   <div className="relative">
                     <img 
                       src={product.img} 
-                      alt={product.name}
-                      className="w-full h-56 object-cover group-hover:scale-110 transition-transform duration-500"
+                      alt={`${product.name} - ${product.description}`}
+                      className="w-full h-48 sm:h-56 object-cover group-hover:scale-110 transition-transform duration-500"
+                      loading="lazy"
                     />
                     <button
                       onClick={() => toggleFavorite(product.id)}
-                      className="absolute top-4 right-4 p-2 bg-white/90 backdrop-blur-sm rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
+                      className="absolute top-4 right-4 p-3 bg-white/90 backdrop-blur-sm rounded-full shadow-lg hover:shadow-xl transition-all duration-300 min-h-[44px] min-w-[44px] focus:outline-none focus:ring-2 focus:ring-red-400"
+                      aria-label={favorites.includes(product.id) ? `Remover ${product.name} dos favoritos` : `Adicionar ${product.name} aos favoritos`}
                     >
                       <HeartIcon 
-                        className={`w-6 h-6 ${
+                        className={`w-5 h-5 ${
                           favorites.includes(product.id) 
                             ? 'text-red-500' 
                             : 'text-gray-400 hover:text-red-400'
                         }`}
                         filled={favorites.includes(product.id)}
+                        ariaLabel={favorites.includes(product.id) ? 'Favorito' : 'Adicionar aos favoritos'}
                       />
                     </button>
-                    <div className="absolute bottom-4 left-4 bg-gradient-to-r from-pink-500 to-orange-500 text-white px-3 py-1 rounded-full text-sm font-bold">
+                    <div className="absolute bottom-4 left-4 bg-gradient-to-r from-pink-500 to-orange-500 text-white px-3 py-1 rounded-full text-sm font-bold" aria-label={`Categoria: ${product.category}`}>
                       {product.category}
                     </div>
                   </div>
-                  <div className="p-6 space-y-4">
+                  <div className="p-4 sm:p-6 space-y-4">
                     <div>
-                      <h4 className="font-bold text-xl text-gray-800 mb-2">{product.name}</h4>
-                      <p className="text-gray-600 text-sm leading-relaxed">{product.description}</p>
+                      <h4 className="font-bold text-lg sm:text-xl text-gray-800 mb-2">{product.name}</h4>
+                      <p className="text-gray-600 text-sm sm:text-base leading-relaxed">{product.description}</p>
                     </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-3xl font-black text-transparent bg-gradient-to-r from-pink-600 to-orange-500 bg-clip-text">
+                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                      <span className="text-2xl sm:text-3xl font-black text-transparent bg-gradient-to-r from-pink-600 to-orange-500 bg-clip-text">
                         R$ {product.price.toFixed(2)}
                       </span>
                       <button
                         onClick={() => addToCart(product)}
-                        className="bg-gradient-to-r from-pink-500 to-orange-500 hover:from-pink-600 hover:to-orange-600 text-white px-6 py-3 rounded-xl font-bold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center space-x-2"
+                        className="w-full sm:w-auto bg-gradient-to-r from-pink-500 to-orange-500 hover:from-pink-600 hover:to-orange-600 text-white px-4 sm:px-6 py-3 rounded-xl font-bold transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center space-x-2 min-h-[48px] focus:outline-none focus:ring-4 focus:ring-pink-300"
+                        aria-label={`Adicionar ${product.name} ao carrinho por R$ ${product.price.toFixed(2)}`}
                       >
-                        <PlusIcon className="w-4 h-4" />
+                        <PlusIcon className="w-4 h-4" ariaLabel="Adicionar" />
                         <span>Adicionar</span>
                       </button>
                     </div>
                   </div>
-                </div>
+                </article>
               ))}
             </div>
 
             {filteredProducts.length === 0 && (
-              <div className="text-center py-16">
-                <p className="text-2xl text-gray-500">
-                  Nenhum produto encontrado 😔
+              <div className="text-center py-12 sm:py-16 px-4">
+                <div className="text-6xl sm:text-8xl mb-4">😔</div>
+                <p className="text-xl sm:text-2xl text-gray-600 font-medium mb-2">
+                  Nenhum produto encontrado
                 </p>
-                <p className="text-lg text-gray-400 mt-2">
+                <p className="text-base sm:text-lg text-gray-500">
                   Tente buscar por outro termo ou categoria
                 </p>
               </div>
@@ -418,102 +540,108 @@ function App() {
           </div>
         )}
 
-        {/* Página do Carrinho */}
+        {/* Página do Carrinho - Responsiva */}
         {currentPage === 'cart' && (
-          <div className="space-y-8">
-            <div className="text-center">
-              <h2 className="text-5xl font-black text-transparent bg-gradient-to-r from-pink-600 to-orange-500 bg-clip-text">
+          <div className="space-y-6 sm:space-y-8">
+            <div className="text-center px-4">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-transparent bg-gradient-to-r from-pink-600 to-orange-500 bg-clip-text" style={{ fontSize: 'clamp(1.875rem, 5vw, 3rem)' }}>
                 Seu Carrinho 🛒
               </h2>
-              <p className="text-xl text-gray-600 mt-4">
+              <p className="text-base sm:text-lg lg:text-xl text-gray-700 mt-4" style={{ fontSize: 'clamp(1rem, 2.5vw, 1.25rem)' }}>
                 {cart.length === 0 ? 'Seu carrinho está vazio' : `${getCartItemsCount()} itens selecionados`}
               </p>
             </div>
 
             {cart.length === 0 ? (
-              <div className="text-center py-16 space-y-6">
-                <div className="text-8xl">🛒</div>
-                <p className="text-2xl text-gray-500">Seu carrinho está vazio</p>
+              <div className="text-center py-12 sm:py-16 space-y-6 px-4">
+                <div className="text-6xl sm:text-8xl">🛒</div>
+                <p className="text-xl sm:text-2xl text-gray-600 font-medium">Seu carrinho está vazio</p>
                 <button
                   onClick={() => setCurrentPage('catalog')}
-                  className="bg-gradient-to-r from-pink-500 to-orange-500 hover:from-pink-600 hover:to-orange-600 text-white font-bold py-4 px-8 rounded-2xl text-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+                  className="bg-gradient-to-r from-pink-500 to-orange-500 hover:from-pink-600 hover:to-orange-600 text-white font-bold py-4 px-6 sm:px-8 rounded-2xl text-lg sm:text-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 min-h-[56px] focus:outline-none focus:ring-4 focus:ring-pink-300"
+                  aria-label="Ir para o catálogo e começar a comprar"
                 >
                   Começar a Comprar
                 </button>
               </div>
             ) : (
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                {/* Lista de Itens */}
-                <div className="lg:col-span-2 space-y-6">
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 px-2">
+                {/* Lista de Itens - Responsiva */}
+                <div className="lg:col-span-2 space-y-4 sm:space-y-6">
                   {cart.map(item => (
-                    <div key={item.id} className="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-300">
-                      <div className="flex flex-col md:flex-row gap-6">
+                    <article key={item.id} className="bg-white rounded-2xl shadow-lg p-4 sm:p-6 hover:shadow-xl transition-shadow duration-300">
+                      <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
                         <img 
                           src={item.img} 
-                          alt={item.name}
-                          className="w-full md:w-32 h-32 object-cover rounded-xl"
+                          alt={`${item.name} - ${item.description}`}
+                          className="w-full sm:w-24 md:w-32 h-32 object-cover rounded-xl"
+                          loading="lazy"
                         />
                         <div className="flex-1 space-y-4">
                           <div>
-                            <h3 className="font-bold text-xl text-gray-800">{item.name}</h3>
-                            <p className="text-gray-600">{item.description}</p>
+                            <h3 className="font-bold text-lg sm:text-xl text-gray-800">{item.name}</h3>
+                            <p className="text-gray-600 text-sm sm:text-base">{item.description}</p>
                           </div>
-                          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                            <span className="text-2xl font-bold text-pink-600">
+                          <div className="flex flex-col gap-4">
+                            <span className="text-xl sm:text-2xl font-bold text-pink-600">
                               R$ {item.price.toFixed(2)}
                             </span>
-                            <div className="flex items-center space-x-4">
+                            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
                               <div className="flex items-center space-x-3 bg-gray-100 rounded-xl p-2">
                                 <button
                                   onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                                  className="p-2 hover:bg-gray-200 rounded-lg transition-colors duration-200 flex items-center justify-center"
+                                  className="p-2 hover:bg-gray-200 rounded-lg transition-colors duration-200 flex items-center justify-center min-h-[44px] min-w-[44px] focus:outline-none focus:ring-2 focus:ring-gray-400"
+                                  aria-label={`Diminuir quantidade de ${item.name}`}
                                 >
-                                  <MinusIcon className="w-4 h-4 text-gray-600" />
+                                  <MinusIcon className="w-4 h-4 text-gray-600" ariaLabel="Diminuir" />
                                 </button>
-                                <span className="font-bold text-lg min-w-[2rem] text-center">
+                                <span className="font-bold text-lg min-w-[3rem] text-center" aria-label={`Quantidade: ${item.quantity}`}>
                                   {item.quantity}
                                 </span>
                                 <button
                                   onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                                  className="p-2 hover:bg-gray-200 rounded-lg transition-colors duration-200 flex items-center justify-center"
+                                  className="p-2 hover:bg-gray-200 rounded-lg transition-colors duration-200 flex items-center justify-center min-h-[44px] min-w-[44px] focus:outline-none focus:ring-2 focus:ring-gray-400"
+                                  aria-label={`Aumentar quantidade de ${item.name}`}
                                 >
-                                  <PlusIcon className="w-4 h-4 text-gray-600" />
+                                  <PlusIcon className="w-4 h-4 text-gray-600" ariaLabel="Aumentar" />
                                 </button>
                               </div>
                               <button
                                 onClick={() => removeFromCart(item.id)}
-                                className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors duration-200"
+                                className="p-3 text-red-500 hover:bg-red-50 rounded-lg transition-colors duration-200 min-h-[44px] min-w-[44px] focus:outline-none focus:ring-2 focus:ring-red-400 flex items-center justify-center"
+                                aria-label={`Remover ${item.name} do carrinho`}
                               >
-                                🗑️
+                                <span className="text-lg" aria-hidden="true">🗑️</span>
                               </button>
                             </div>
                           </div>
                         </div>
                       </div>
-                    </div>
+                    </article>
                   ))}
                 </div>
 
-                {/* Resumo do Pedido */}
-                <div className="bg-white rounded-2xl shadow-lg p-6 h-fit sticky top-32">
-                  <h3 className="text-2xl font-bold text-gray-800 mb-6">Resumo do Pedido</h3>
+                {/* Resumo do Pedido - Responsivo */}
+                <div className="bg-white rounded-2xl shadow-lg p-4 sm:p-6 h-fit lg:sticky lg:top-32">
+                  <h3 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6">Resumo do Pedido</h3>
                   <div className="space-y-4">
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Subtotal:</span>
-                      <span className="font-bold">R$ {getCartTotal().toFixed(2)}</span>
+                    <div className="flex justify-between items-center">
+                      <span className="text-gray-600 text-sm sm:text-base">Subtotal:</span>
+                      <span className="font-bold text-sm sm:text-base">R$ {getCartTotal().toFixed(2)}</span>
                     </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Taxa de entrega:</span>
-                      <span className="font-bold">R$ 8,00</span>
+                    <div className="flex justify-between items-center">
+                      <span className="text-gray-600 text-sm sm:text-base">Taxa de entrega:</span>
+                      <span className="font-bold text-sm sm:text-base">R$ 8,00</span>
                     </div>
                     <hr className="border-gray-200" />
-                    <div className="flex justify-between text-xl">
+                    <div className="flex justify-between items-center text-lg sm:text-xl">
                       <span className="font-bold">Total:</span>
                       <span className="font-black text-pink-600">R$ {(getCartTotal() + 8).toFixed(2)}</span>
                     </div>
                     <button
                       onClick={() => setCurrentPage('checkout')}
-                      className="w-full bg-gradient-to-r from-pink-500 to-orange-500 hover:from-pink-600 hover:to-orange-600 text-white font-bold py-4 rounded-xl text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+                      className="w-full bg-gradient-to-r from-pink-500 to-orange-500 hover:from-pink-600 hover:to-orange-600 text-white font-bold py-4 rounded-xl text-base sm:text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 min-h-[56px] focus:outline-none focus:ring-4 focus:ring-pink-300"
+                      aria-label={`Finalizar pedido no valor total de R$ ${(getCartTotal() + 8).toFixed(2)}`}
                     >
                       Finalizar Pedido 🎉
                     </button>
