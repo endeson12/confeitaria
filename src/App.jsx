@@ -1005,7 +1005,7 @@ function App() {
       </main>
 
       {/* Rodapé */}
-      <footer className="bg-neutral-800 text-white mt-16">
+      <footer className="bg-cream-light text-chocolate-dark mt-16">
         <div className="max-w-7xl mx-auto px-4 py-12">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             {/* Logo e Descrição */}
@@ -1013,7 +1013,7 @@ function App() {
               <h3 className="text-2xl font-bold text-transparent bg-gradient-to-r from-primary-400 to-secondary-400 bg-clip-text">
                 Delícias da Casa 🍰
               </h3>
-              <p className="text-neutral-300 leading-relaxed">
+              <p className="text-chocolate-dark leading-relaxed">
                 Criando momentos doces e especiais desde 2008 com produtos artesanais de alta qualidade.
               </p>
               <div className="flex space-x-4">
@@ -1035,25 +1035,25 @@ function App() {
               <div className="space-y-2">
                 <button 
                   onClick={() => setCurrentPage('home')}
-                  className="block text-neutral-300 hover:text-primary-400 transition-colors duration-300"
+                  className="block text-chocolate-dark hover:text-chocolate-light transition-colors duration-300"
                 >
                   Início
                 </button>
                 <button 
                   onClick={() => setCurrentPage('catalog')}
-                  className="block text-neutral-300 hover:text-primary-400 transition-colors duration-300"
+                  className="block text-chocolate-dark hover:text-chocolate-light transition-colors duration-300"
                 >
                   Catálogo
                 </button>
                 <button 
                   onClick={() => setCurrentPage('about')}
-                  className="block text-neutral-300 hover:text-primary-400 transition-colors duration-300"
+                  className="block text-chocolate-dark hover:text-chocolate-light transition-colors duration-300"
                 >
                   Sobre Nós
                 </button>
                 <button 
                   onClick={() => setCurrentPage('contact')}
-                  className="block text-neutral-300 hover:text-primary-400 transition-colors duration-300"
+                  className="block text-chocolate-dark hover:text-chocolate-light transition-colors duration-300"
                 >
                   Contato
                 </button>
@@ -1063,7 +1063,7 @@ function App() {
             {/* Contato */}
             <div className="space-y-4">
               <h4 className="text-lg font-bold">Contato</h4>
-              <div className="space-y-2 text-neutral-300">
+              <div className="space-y-2 text-chocolate-dark">
                 <p>📍 Rua das Delícias, 123</p>
                 <p>São Paulo, SP</p>
                 <p>📞 (11) 9999-8888</p>
@@ -1074,7 +1074,7 @@ function App() {
             {/* Horário */}
             <div className="space-y-4">
               <h4 className="text-lg font-bold">Horário de Funcionamento</h4>
-              <div className="space-y-2 text-neutral-300">
+              <div className="space-y-2 text-chocolate-dark">
                 <p>Segunda a Sexta: 8h às 18h</p>
                 <p>Sábado: 8h às 16h</p>
                 <p>Domingo: 9h às 15h</p>
@@ -1082,17 +1082,17 @@ function App() {
             </div>
           </div>
 
-          <hr className="border-neutral-700 my-8" />
+          <hr className="border-chocolate-light my-8" />
           
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-            <p className="text-neutral-400">
+            <p className="text-chocolate-dark">
               © 2024 Delícias da Casa. Todos os direitos reservados.
             </p>
-            <div className="flex space-x-6 text-neutral-400">
-              <button className="hover:text-primary-400 transition-colors duration-300">
+            <div className="flex space-x-6 text-chocolate-dark">
+              <button className="hover:text-chocolate-light transition-colors duration-300">
                 Política de Privacidade
               </button>
-              <button className="hover:text-primary-400 transition-colors duration-300">
+              <button className="hover:text-chocolate-light transition-colors duration-300">
                 Termos de Uso
               </button>
             </div>
