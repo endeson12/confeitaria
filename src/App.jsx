@@ -1085,9 +1085,8 @@ function App() {
           <hr className="border-chocolate-light my-8" />
           
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-            <p className="text-chocolate-dark">
-              © 2024 Delícias da Casa. Todos os direitos reservados.
-            </p>
+
+
             <div className="flex space-x-6 text-chocolate-dark">
               <button className="hover:text-chocolate-light transition-colors duration-300">
                 Política de Privacidade
